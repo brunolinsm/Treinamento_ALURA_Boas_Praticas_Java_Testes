@@ -1,8 +1,7 @@
 package br.com.alura.adopet.api.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import br.com.alura.adopet.api.dto.CadastroAbrigoDto;
@@ -15,8 +14,11 @@ import br.com.alura.adopet.api.model.TipoPet;
 class CalculadoraProbabilidadeAdocaoTest {
 
 	@Test
-	void retornaProbabilidadeAltaParaPetComIdadeBaixaEPesoBaixo() {
+	@DisplayName("Probabilidade alta para gatos jovens com peso baixo")
+    void probabilidadeAltaCenario1() {
 		//Idade 4 anos e 4kg - ALTA
+		
+		//ARRANGE
 		 Abrigo abrigo = new Abrigo(new CadastroAbrigoDto(
 	                "Abrigo feliz",
 	                "94999999999",
@@ -33,13 +35,17 @@ class CalculadoraProbabilidadeAdocaoTest {
 	        ), abrigo);
 	     
 		CalculadoraProbabilidadeAdocao calculadora = new CalculadoraProbabilidadeAdocao();
+		
+		//ACT
 		ProbabilidadeAdocao probabilidade = calculadora.calcular(pet);
 		
+		//ASSERT
 		Assertions.assertEquals(ProbabilidadeAdocao.ALTA, probabilidade);
 	}
 	
 	@Test
-	void retornaProbabilidadeMediaParaPetComIdadeAltaEPesoBaixo() {
+	@DisplayName("Probabilidade média para gatos idosos com peso baixo")
+    void probabilidadeMediaCenario1() {
 		//Idade 15 anos e 4kg - MEDIA
 		 Abrigo abrigo = new Abrigo(new CadastroAbrigoDto(
 	                "Abrigo feliz",
