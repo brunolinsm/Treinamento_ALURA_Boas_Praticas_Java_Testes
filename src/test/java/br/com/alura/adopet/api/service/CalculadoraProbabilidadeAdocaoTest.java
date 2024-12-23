@@ -15,7 +15,7 @@ import br.com.alura.adopet.api.model.TipoPet;
 class CalculadoraProbabilidadeAdocaoTest {
 
 	@Test
-	void cenario1() {
+	void retornaProbabilidadeAltaParaPetComIdadeBaixaEPesoBaixo() {
 		//Idade 4 anos e 4kg - ALTA
 		 Abrigo abrigo = new Abrigo(new CadastroAbrigoDto(
 	                "Abrigo feliz",
@@ -39,7 +39,7 @@ class CalculadoraProbabilidadeAdocaoTest {
 	}
 	
 	@Test
-	void cenario2() {
+	void retornaProbabilidadeMediaParaPetComIdadeAltaEPesoBaixo() {
 		//Idade 15 anos e 4kg - MEDIA
 		 Abrigo abrigo = new Abrigo(new CadastroAbrigoDto(
 	                "Abrigo feliz",
