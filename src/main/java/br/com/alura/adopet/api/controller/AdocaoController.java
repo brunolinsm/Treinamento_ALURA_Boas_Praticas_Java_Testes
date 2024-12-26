@@ -42,5 +42,4 @@ public class AdocaoController {
         this.adocaoService.reprovar(dto);
         return ResponseEntity.ok().build();
     }
-
 }
