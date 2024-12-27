@@ -1,6 +1,7 @@
 package br.com.alura.adopet.api.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,8 +12,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
+import br.com.alura.adopet.api.dto.AprovacaoAdocaoDto;
+import br.com.alura.adopet.api.dto.ReprovacaoAdocaoDto;
 import br.com.alura.adopet.api.dto.SolicitacaoAdocaoDto;
 import br.com.alura.adopet.api.service.AdocaoService;
 
@@ -28,7 +32,13 @@ class AdocaoControllerTest {
 	private AdocaoService service;
 	
 	 @Autowired
-	 private JacksonTester<SolicitacaoAdocaoDto> jsonDto;
+	 private JacksonTester<SolicitacaoAdocaoDto> jsonSolicitacaoAdocaoDto;
+	 
+	 @Autowired
+	 private JacksonTester<AprovacaoAdocaoDto> jsonAprovacaoAdocaoDto;
+	 
+	 @Autowired
+	 private JacksonTester<ReprovacaoAdocaoDto> jsonReprovacaoAdocaoDto;
 
 	@Test
 	void deveDevolverCodigo400ParaSolicitacaoDeAdocaoComErros() throws Exception {
@@ -55,7 +65,7 @@ class AdocaoControllerTest {
 		//ACT
 		var response = mvc.perform(
 				post("/adocoes")
-					.content(jsonDto.write(dto).getJson())
+					.content(jsonSolicitacaoAdocaoDto.write(dto).getJson())
 					.contentType(MediaType.APPLICATION_JSON)
 				
 		).andReturn().getResponse();
@@ -64,4 +74,79 @@ class AdocaoControllerTest {
 		Assertions.assertEquals(200, response.getStatus());
 		Assertions.assertEquals("Adoção solicitada com sucesso!", response.getContentAsString());
 	}
+	
+	@Test
+	void deveDevolverCodigo200ParaRequisicaoDeAprovarAdocao() throws Exception {
+		//ARRANGE
+		AprovacaoAdocaoDto dto = new AprovacaoAdocaoDto(1l);
+		
+		//ACT
+		var response = mvc.perform(
+				put("/adocoes/aprovar")
+					.content(jsonAprovacaoAdocaoDto.write(dto).getJson())
+					.contentType(MediaType.APPLICATION_JSON)
+				
+		).andReturn().getResponse();
+		
+		//ASSERT
+		Assertions.assertEquals(200, response.getStatus());
+	}
+	
+	@Test
+	void deveDevolverCodigo400ParaRequisicaoDeAprovarAdocaoInvalida() throws Exception {
+		//ARRANGE
+		String json = """
+                {
+                    
+                }
+                """;
+		
+		//ACT
+		MockHttpServletResponse response = mvc.perform(
+                put("/adocoes/aprovar")
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+		
+		//ASSERT
+		Assertions.assertEquals(400, response.getStatus());
+	}
+	
+	@Test
+	void deveDevolverCodigo200ParaRequisicaoDeReprovarAdocao() throws Exception {
+		//ARRANGE
+		ReprovacaoAdocaoDto dto = new ReprovacaoAdocaoDto(1l,"qualquer");
+		
+		//ACT
+		var response = mvc.perform(
+				put("/adocoes/reprovar")
+					.content(jsonReprovacaoAdocaoDto.write(dto).getJson())
+					.contentType(MediaType.APPLICATION_JSON)
+				
+		).andReturn().getResponse();
+		
+		//ASSERT
+		Assertions.assertEquals(200, response.getStatus());
+	}
+	
+	@Test
+	void deveDevolverCodigo400ParaRequisicaoDeReprovarAdocaoInvalida() throws Exception {
+		//ARRANGE
+		String json = """
+                {
+                    
+                }
+                """;
+		
+		//ACT
+		MockHttpServletResponse response = mvc.perform(
+                put("/adocoes/reprovar")
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andReturn().getResponse();
+		
+		//ASSERT
+		Assertions.assertEquals(400, response.getStatus());
+	}
+
 }
